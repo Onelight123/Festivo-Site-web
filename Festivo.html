@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festivo 🎉 | Bot Discord Ultime</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --discord-blurple: #5865F2;
+            --discord-dark: #2C2F33;
+            --discord-darker: #23272A;
+            --discord-light: #FFFFFF;
+            --discord-gray: #99AAB5;
+            --discord-green: #3BA55C;
+            --discord-red: #ED4245;
+            --discord-yellow: #FAA61A;
+            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--discord-darker);
+            color: var(--discord-light);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeIn 0.5s 0.2s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Effet de particules plus discret */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background-color: var(--discord-darker);
+            opacity: 0.3;
+        }
+
+        /* Navbar plus rapide */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(35, 39, 42, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar.scrolled {
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--discord-light);
+        }
+
+        .logo-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--discord-blurple);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--discord-gray);
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--discord-light);
+        }
+
+        .nav-link.active {
+            color: var(--discord-blurple);
+        }
+
+        /* Hero Section plus rapide */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 1.5rem;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            text-align: center;
+            padding: 5rem 0;
+        }
+
+        .hero-title {
+            font-size: clamp(2.2rem, 7vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.2rem;
+            background: linear-gradient(90deg, var(--discord-light), var(--discord-gray));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(0.9rem, 3vw, 1.3rem);
+            color: var(--discord-gray);
+            margin-bottom: 2.5rem;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Boutons optimisés */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.9rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: var(--discord-blurple);
+            color: var(--discord-light);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(88, 101, 242, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--discord-light);
+            border: 2px solid var(--discord-blurple);
+        }
+
+        .btn-outline:hover {
+            background: rgba(88, 101, 242, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn i {
+            margin-right: 6px;
+            font-size: 1em;
+        }
+
+        /* Sections optimisées */
+        .section {
+            padding: 5rem 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+
+        .section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 6vw, 2.8rem);
+            font-weight: 800;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            background: linear-gradient(90deg, var(--discord-blurple), #AD5CFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.2rem;
+        }
+
+        /* Commandes optimisées */
+        .commands-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+
+        .command-card {
+            background: rgba(54, 57, 63, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 10px;
+            padding: 1.2rem;
+            border-left: 3px solid var(--discord-blurple);
+            transition: var(--transition);
+        }
+
+        .command-card:hover {
+            transform: translateY(-5px);
+            background: rgba(64, 68, 75, 0.8);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .command-name {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--discord-blurple);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .command-name i {
+            font-size: 1em;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Emojis plus visibles */
+        .emoji {
+            font-size: 1.2em;
+            vertical-align: middle;
+            margin-right: 5px;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+        }
+
+        .category-title .emoji {
+            font-size: 1.4em;
+        }
+
+        .command-desc {
+            color: var(--discord-gray);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .command-usage {
+            display: block;
+            margin-top: 0.4rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--discord-gray);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            border-left: 2px solid var(--discord-blurple);
+        }
+
+        /* Catégories de commandes */
+        .category-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 2rem 0 1.2rem;
+            color: var(--discord-light);
+            padding-bottom: 0.3rem;
+            border-bottom: 2px solid var(--discord-blurple);
+            grid-column: 1 / -1;
+        }
+
+        /* Ajout du bot */
+        .add-bot-methods {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .method-card {
+            background: rgba(54, 57, 63, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 10px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(88, 101, 242, 0.2);
+        }
+
+        .method-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            border-color: var(--discord-blurple);
+        }
+
+        .method-icon {
+            font-size: 2rem;
+            margin-bottom: 1.2rem;
+            color: var(--discord-blurple);
+        }
+
+        /* Sections légales */
+        .legal-container {
+            max-width: 750px;
+            margin: 0 auto;
+            background: rgba(54, 57, 63, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 10px;
+            padding: 2rem;
+            border-left: 3px solid var(--discord-blurple);
+        }
+
+        .legal-section {
+            margin-bottom: 2rem;
+        }
+
+        .legal-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--discord-blurple);
+        }
+
+        .legal-text {
+            color: var(--discord-gray);
+            margin-bottom: 0.8rem;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .legal-list {
+            padding-left: 1.2rem;
+            margin-bottom: 0.8rem;
+            color: var(--discord-gray);
+            font-size: 0.95rem;
+        }
+
+        .legal-list li {
+            margin-bottom: 0.6rem;
+            line-height: 1.5;
+        }
+
+        .legal-highlight {
+            color: var(--discord-light);
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--discord-dark);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-text {
+            color: var(--discord-gray);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+
+            .nav-logo {
+                font-size: 1.1rem;
+                gap: 8px;
+            }
+
+            .logo-img {
+                width: 30px;
+                height: 30px;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .hero-content {
+                padding: 4rem 0;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 250px;
+                padding: 0.8rem 1.5rem;
+            }
+
+            .commands-container {
+                grid-template-columns: 1fr;
+            }
+
+            .add-bot-methods {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.2rem;
+            }
+
+            .method-card {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Effet de particules -->
+    <div id="particles-js"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="nav-logo">
+            <img src="https://cdn.discordapp.com/icons/1138617798122279052/64c91d39bc3fcdef3896fdbb5c2a2be3.webp?size=1024&format=webp" alt="Festivo Logo" class="logo-img">
+            <span class="logo-text">Festivo</span>
+        </a>
+        <div class="nav-links">
+            <a href="#features" class="nav-link">Fonctions</a>
+            <a href="#commands" class="nav-link">Commandes</a>
+            <a href="#add-bot" class="nav-link">Ajouter</a>
+            <a href="#privacy" class="nav-link">Confidentialité</a>
+            <a href="#tos" class="nav-link">Conditions</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Festivo <span class="emoji">🎉</span></h1>
+            <p class="hero-subtitle">Le bot Discord ultime avec +50 commandes pour animer votre serveur ! Modération, jeux, musique et bien plus...</p>
+            
+            <div class="hero-buttons">
+                <a href="#add-bot" class="btn btn-primary">
+                    <i class="fas fa-robot"></i> Ajouter le bot
+                </a>
+                <a href="https://discord.gg/aeZhmkgMaQ" target="_blank" class="btn btn-outline">
+                    <i class="fab fa-discord"></i> Serveur Support
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="section">
+        <div class="container">
+            <h2 class="section-title"><span class="emoji">✨</span> Fonctionnalités</h2>
+            <div class="commands-container">
+                <h3 class="category-title"><span class="emoji">🎮</span> Mini-Jeux</h3>
+                
+                <div class="command-card">
+                    <div class="command-name">
+                        <i class="fas fa-dice"></i> /quiz
+                    </div>
+                    <p class="command-desc">Lance un quiz avec différentes catégories et difficultés.</p>
+                    <span class="command-usage">/quiz [catégorie] [difficulté]</span>
+                </div>
+                
+                <div class="command-card">
+                    <div class="command-name">
+                        <i class="fas fa-chess"></i> /pendu
+                    </div>
+                    <p class="command-desc">Jouez au jeu du pendu avec vos amis.</p>
+                </div>
+                
+                <div class="command-card">
+                    <div class="command-name">
+                        <i class="fas fa-coins"></i> /coinflip
+                    </div>
+                    <p class="command-desc">Lance une pièce pour prendre une décision aléatoire.</p>
+                </div>
+                
+                <h3 class="category-title"><span class="emoji">🛡️</span> Modération</h3>
+                
+                <div class="command-card">
+                    <div class="command-name">
+                        <i class="fas fa-user-slash"></i> /kick
+                    </div>
+                    <p class="command-desc">Expulse un membre du serveur.</p>
+                    <span class="command-usage">/kick @membre [raison]</span>
+                </div>
+                
+                <div class="command-card">
+                    <div class="command-name">
+                        <i class="fas fa-ban"></i> /ban
+                    </div>
+                    <p class="command-desc">Bannit un membre du serveur.</p>
+                    <span class="command-usage">/ban @membre [raison]</span>
+                </div>
+                
+                <div class="command-card">
+                    <div class="command-name">
+                        <i class="fas fa-comment-slash"></i> /mute
+                    </div>
+                    <p class="command-desc">Rend un membre muet pendant une durée spécifiée.</p>
+                    <span class="command-usage">/mute @membre [durée] [raison]</span>
+                </div>
+                
+                <h3 class="category-title"><span class="emoji">🎉</span> Giveaways</h3>
+                
+                <div class="command-card">
+                    <div class="command-name">
+                        <i class="fas fa-gift"></i> /gstart
+                    </div>
+                    <p class="command-desc">Lance un nouveau giveaway.</p>
+                    <span class="command-usage">/gstart [durée] [prix]</span>
+                </div>
+                
+                <div class="command-card">
+                    <div class="command-name">
+                        <i class="fas fa-redo"></i> /greroll
+                    </div>
+                    <p class="command-desc">Relance un giveaway pour choisir un nouveau gagnant.</p>
+                    <span class="command-usage">/greroll [message-id]</span>
+                </div>
+                
+                <h3 class="category-title"><span class="emoji">🎵</span> Musique</h3>
+                
+                <div class="command-card">
+                    <div class="command-name">
+                        <i class="fas fa-play"></i> /play
+                    </div>
+                    <p class="command-desc">Joue une musique depuis YouTube ou Spotify.</p>
+                    <span class="command-usage">/play [lien ou recherche]</span>
+                </div>
+                
+                <div class="command-card">
+                    <div class="command-name">
+                        <i class="fas fa-list"></i> /queue
+                    </div>
+                    <p class="command-desc">Affiche la file d'attente des musiques.</p>
+                </div>
+                
+                <div class="command-card">
+                    <div class="command-name">
+                        <i class="fas fa-volume-up"></i> /volume
+                    </div>
+                    <p class="command-desc">Ajuste le volume de la musique.</p>
+                    <span class="command-usage">/volume [1-100]</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ajouter le bot -->
+    <section id="add-bot" class="section">
+        <div class="container">
+            <h2 class="section-title"><span class="emoji">🤖</span> Ajouter le bot</h2>
+            <p style="text-align: center; margin-bottom: 1.5rem; color: var(--discord-gray); max-width: 700px; margin-left: auto; margin-right: auto;">
+                Vous pouvez ajouter Festivo à votre serveur Discord en utilisant l'une des méthodes ci-dessous.
+            </p>
+            
+            <div class="add-bot-methods">
+                <div class="method-card">
+                    <div class="method-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <h3>Lien d'invitation</h3>
+                    <p>Cliquez sur le bouton ci-dessous pour être redirigé vers la page d'ajout du bot.</p>
+                    <a href="https://discord.com/oauth2/authorize?client_id=VOTRE_ID_BOT" class="btn btn-primary" style="margin-top: 1.2rem;">
+                        Ajouter Festivo
+                    </a>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-icon">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <h3>Via le serveur support</h3>
+                    <p>Rejoignez notre serveur Discord et ajoutez le bot directement depuis là.</p>
+                    <a href="https://discord.gg/aeZhmkgMaQ" class="btn btn-outline" style="margin-top: 1.2rem;" target="_blank">
+                        Rejoindre le serveur
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Confidentialité -->
+    <section id="privacy" class="section">
+        <div class="container">
+            <div class="legal-container">
+                <h2 class="section-title"><span class="emoji">🔒</span> Politique de Confidentialité</h2>
+                
+                <div class="legal-section">
+                    <p class="legal-text">Dernière mise à jour : 31 mars 2025</p>
+                </div>
+                
+                <div class="legal-section">
+                    <h3 class="legal-title">1. Données Collectées</h3>
+                    <p class="legal-text">Festivo peut collecter et stocker les données suivantes :</p>
+                    <ul class="legal-list">
+                        <li><span class="legal-highlight">Identifiants Discord</span> : ID utilisateur, ID serveur, ID salon, ID messages</li>
+                        <li><span class="legal-highlight">Données de configuration</span> : Préférences du serveur, rôles, permissions</li>
+                        <li><span class="legal-highlight">Données d'utilisation</span> : Commandes exécutées, interactions avec le bot</li>
+                    </ul>
+                </div>
+                
+                <div class="legal-section">
+                    <h3 class="legal-title">2. Utilisation des Données</h3>
+                    <p class="legal-text">Les données collectées sont utilisées pour :</p>
+                    <ul class="legal-list">
+                        <li>Fournir et maintenir les fonctionnalités du bot</li>
+                        <li>Personnaliser l'expérience utilisateur</li>
+                        <li>Améliorer et développer de nouvelles fonctionnalités</li>
+                    </ul>
+                </div>
+                
+                <div class="legal-section">
+                    <h3 class="legal-title">3. Partage des Données</h3>
+                    <p class="legal-text">Vos données ne sont <span class="legal-highlight">jamais vendues</span> à des tiers.</p>
+                </div>
+                
+                <div class="legal-section">
+                    <h3 class="legal-title">4. Vos Droits</h3>
+                    <p class="legal-text">Vous avez le droit d'accéder, rectifier et supprimer vos données.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conditions d'utilisation -->
+    <section id="tos" class="section">
+        <div class="container">
+            <div class="legal-container">
+                <h2 class="section-title"><span class="emoji">📜</span> Conditions d'Utilisation</h2>
+                
+                <div class="legal-section">
+                    <p class="legal-text">En utilisant Festivo, vous acceptez ces conditions.</p>
+                </div>
+                
+                <div class="legal-section">
+                    <h3 class="legal-title">1. Acceptation des Conditions</h3>
+                    <p class="legal-text">En ajoutant Festivo à un serveur, vous acceptez ces CGU.</p>
+                </div>
+                
+                <div class="legal-section">
+                    <h3 class="legal-title">2. Comportement Interdit</h3>
+                    <p class="legal-text">L'utilisation de Festivo pour des activités illégales ou abusives est interdite.</p>
+                </div>
+                
+                <div class="legal-section">
+                    <h3 class="legal-title">3. Responsabilités</h3>
+                    <p class="legal-text">Nous ne sommes pas responsables de l'utilisation du bot sur votre serveur.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p class="footer-text">© 2025 Festivo | Créé avec <span class="emoji">❤️</span> par OneLight</p>
+            <p class="footer-text" style="margin-top: 0.5rem;">Ce bot n'est pas affilié à Discord Inc.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts optimisés -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialisation des particules plus légères
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 60 },
+                color: { value: "#5865F2" },
+                shape: { type: "circle" },
+                opacity: { value: 0.3, random: true },
+                size: { value: 2, random: true },
+                line_linked: { 
+                    enable: true,
+                    distance: 120,
+                    color: "#5865F2",
+                    opacity: 0.2,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 1,
+                    direction: "none",
+                    random: true
+                }
+            },
+            interactivity: {
+                events: {
+                    onhover: { enable: true, mode: "grab" }
+                }
+            }
+        });
+
+        // Gestion du scroll plus performante
+        function handleScroll() {
+            // Animation de la navbar
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            // Animation des sections
+            const sections = document.querySelectorAll('.section');
+            const windowHeight = window.innerHeight;
+            const triggerPoint = windowHeight * 0.8;
+
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                if (sectionTop < triggerPoint) {
+                    section.classList.add('active');
+                }
+            });
+
+            // Highlight de la navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop - 100 && window.scrollY < sectionTop + sectionHeight - 100) {
+                    const id = section.getAttribute('id');
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+
+        // Smooth scroll pour les ancres
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Initialisation
+        window.addEventListener('DOMContentLoaded', () => {
+            // Activer la première section immédiatement
+            document.querySelector('.section').classList.add('active');
+            
+            // Configurer l'observateur de scroll
+            window.addEventListener('scroll', handleScroll);
+            handleScroll(); // Appel initial
+            
+            // Activer le body
+            document.body.style.opacity = '1';
+        });
+    </script>
+</body>
+</html>
